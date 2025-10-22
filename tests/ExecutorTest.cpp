@@ -35,7 +35,8 @@ TEST(ExecutorTest,should_return_default_pose_when_without_init_and_command)
     ASSERT_EQ(target,executor->Query());
 }
 
-// M
+//前进测试
+// M_E
 TEST(ExecutorTest, should_return_x_plus_1_given_command_is_M_and_facing_is_E)
 {
     // given
@@ -49,7 +50,7 @@ TEST(ExecutorTest, should_return_x_plus_1_given_command_is_M_and_facing_is_E)
     ASSERT_EQ(target, executor->Query());
 }
 
-//W
+//M_W
 TEST(ExecutorTest, should_return_x_minus_1_given_command_is_M_and_facing_is_W)
 {
     // given
@@ -64,7 +65,7 @@ TEST(ExecutorTest, should_return_x_minus_1_given_command_is_M_and_facing_is_W)
 
 }
 
-//N
+//M_N
 TEST(ExecutorTest, should_return_y_plus_1_given_command_is_M_and_facing_is_N)
 {
     // given
@@ -78,7 +79,7 @@ TEST(ExecutorTest, should_return_y_plus_1_given_command_is_M_and_facing_is_N)
     ASSERT_EQ(target, executor->Query());
 }
 
-//S
+//M_S
 TEST(ExecutorTest, should_return_y_minus_1_given_command_is_M_and_facing_is_S)
 {
     // given
@@ -92,5 +93,90 @@ TEST(ExecutorTest, should_return_y_minus_1_given_command_is_M_and_facing_is_S)
     ASSERT_EQ(target, executor->Query());
 }
 
+// 左转测试
+TEST(ExecutorTest, should_return_facing_W_given_command_is_L_and_facing_is_N)
+{
+    // given初始：车辆朝北(N)
+    std::unique_ptr<Executor> executor(Executor::NewExecutor({0, 0, 'N'}));
+
+    // when发送左转指令
+    executor->Execute("L");
+
+    // then朝向变为西(W)，位置不变
+    const Pose target({0, 0, 'W'});
+    ASSERT_EQ(target, executor->Query());
+}
+TEST(ExecutorTest, should_return_facing_S_given_command_is_L_and_facing_is_W)
+{
+    //given
+    std::unique_ptr<Executor> executor(Executor::NewExecutor({0, 0, 'W'}));
+    //when
+    executor->Execute("L");
+    // then
+    const Pose target({0, 0, 'S'});
+    ASSERT_EQ(target, executor->Query());
+}
+TEST(ExecutorTest, should_return_facing_E_given_command_is_L_and_facing_is_S)
+{
+    // given
+    std::unique_ptr<Executor> executor(Executor::NewExecutor({0, 0, 'S'}));
+    // when
+    executor->Execute("L");
+    // then
+    const Pose target({0, 0, 'E'});
+    ASSERT_EQ(target, executor->Query());
+}
+TEST(ExecutorTest, should_return_facing_N_given_command_is_L_and_facing_is_E)
+{
+    // given
+    std::unique_ptr<Executor> executor(Executor::NewExecutor({0, 0, 'E'}));
+    // when
+    executor->Execute("L");
+    // then
+    const Pose target({0, 0, 'N'});
+    ASSERT_EQ(target, executor->Query());
+}
+
+// 右转测试
+TEST(ExecutorTest, should_return_facing_E_given_command_is_R_and_facing_is_N)
+{
+    // given
+    std::unique_ptr<Executor> executor(Executor::NewExecutor({0, 0, 'N'}));
+    // when
+    executor->Execute("R");
+    // then
+    const Pose target({0, 0, 'E'});
+    ASSERT_EQ(target, executor->Query());
+}
+TEST(ExecutorTest, should_return_facing_S_given_command_is_R_and_facing_is_E)
+{
+    // given
+    std::unique_ptr<Executor> executor(Executor::NewExecutor({0, 0, 'E'}));
+    // when
+    executor->Execute("R");
+    // then
+    const Pose target({0, 0, 'S'});
+    ASSERT_EQ(target, executor->Query());
+}
+TEST(ExecutorTest, should_return_facing_W_given_command_is_R_and_facing_is_S)
+{
+    // given
+    std::unique_ptr<Executor> executor(Executor::NewExecutor({0, 0, 'S'}));
+    // when
+    executor->Execute("R");
+    // then
+    const Pose target({0, 0, 'W'});
+    ASSERT_EQ(target, executor->Query());
+}
+TEST(ExecutorTest, should_return_facing_N_given_command_is_R_and_facing_is_W)
+{
+    // given
+    std::unique_ptr<Executor> executor(Executor::NewExecutor({0, 0, 'W'}));
+    // when
+    executor->Execute("R");
+    // then
+    const Pose target({0, 0, 'N'});
+    ASSERT_EQ(target, executor->Query());
+}
 
 }  // namespace adas
