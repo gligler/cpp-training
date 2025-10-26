@@ -13,26 +13,13 @@ ExecutorImpl::ExecutorImpl(const Pose& pose) noexcept:pose(pose)
 
 void ExecutorImpl::Execute(const std::string& commands) noexcept
 {
-    for (char command : commands)
+    for (const auto cmd : commands)
     {
-        if (command == 'M') // 前进
+        if (cmd == 'M') // 前进
         {
-            switch (pose.heading)
-            {
-            case 'E':
-                pose.x += 1;
-                break;
-            case 'W':
-                pose.x -= 1;
-                break;
-            case 'N':
-                pose.y += 1;
-                break;
-            case 'S':
-                pose.y -= 1;
-                break;
-            }
-        } else if (command == 'L')  // 左转
+            Move();
+        }
+        else if (cmd == 'L')  // 左转
         {
             switch (pose.heading) {
             case 'N':
@@ -50,7 +37,7 @@ void ExecutorImpl::Execute(const std::string& commands) noexcept
             }
         }
 
-        else if (command == 'R')  // 右转
+        else if (cmd == 'R')  // 右转
         {
             switch (pose.heading) {
             case 'N':
@@ -70,6 +57,23 @@ void ExecutorImpl::Execute(const std::string& commands) noexcept
     }
  }
 
+ void ExecutorImpl::Move() noexcept
+ {
+     switch (pose.heading) {
+     case 'N':
+         ++pose.y;
+         break;
+     case 'W':
+         --pose.x;
+         break;
+     case 'S':
+         --pose.y;
+         break;
+     case 'E':
+         ++pose.x;
+         break;
+     }
+ }
 
 Pose ExecutorImpl::Query() const noexcept
 {
