@@ -36,6 +36,15 @@ private:
             executor.Move();  // ← 这里调用的是上面 实际前进的代码
         }
     };
+
+    class TurnLeftCommand final
+    {
+    public:
+        void DoOperate(ExecutorImpl& executor) const noexcept
+        {
+            executor.TurnLeft();  // ← 这里调用的是上面 实际左转的代码
+        }
+    };  
 };
 
 

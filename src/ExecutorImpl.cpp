@@ -24,7 +24,9 @@ void ExecutorImpl::Execute(const std::string& commands) noexcept
         }
         else if (cmd == 'L')  // 左转
         {
-            TurnLeft();
+            //TurnLeft();
+            std::unique_ptr<TurnLeftCommand> cmder = std::make_unique<TurnLeftCommand>();
+           cmder->DoOperate(*this); 
         }
 
         else if (cmd == 'R')  // 右转
