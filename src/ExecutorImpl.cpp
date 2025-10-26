@@ -21,20 +21,7 @@ void ExecutorImpl::Execute(const std::string& commands) noexcept
         }
         else if (cmd == 'L')  // 左转
         {
-            switch (pose.heading) {
-            case 'N':
-                pose.heading = 'W';
-                break;
-            case 'W':
-                pose.heading = 'S';
-                break;
-            case 'S':
-                pose.heading = 'E';
-                break;
-            case 'E':
-                pose.heading = 'N';
-                break;
-            }
+            TurnLeft();
         }
 
         else if (cmd == 'R')  // 右转
@@ -72,6 +59,23 @@ void ExecutorImpl::Execute(const std::string& commands) noexcept
      case 'E':
          ++pose.x;
          break;
+     }
+ }
+
+ void ExecutorImpl::TurnLeft() noexcept
+ {
+     switch (pose.heading) {
+     case 'N':
+         pose.heading = 'W';
+         break;
+     case 'W':
+         pose.heading = 'S';
+         break;
+     case 'S':
+         pose.heading = 'E';
+         break;
+     case 'E':
+         pose.heading = 'N';
      }
  }
 
