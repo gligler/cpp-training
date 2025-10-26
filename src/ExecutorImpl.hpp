@@ -45,6 +45,15 @@ private:
             executor.TurnLeft();  // ← 这里调用的是上面 实际左转的代码
         }
     };  
+
+    class TurnRightCommand final
+    {
+    public:
+        void DoOperate(ExecutorImpl& executor) const noexcept
+        {
+            executor.TurnRight();  // ← 这里调用的是上面 实际右转的代码
+        }
+    };  
 };
 
 
