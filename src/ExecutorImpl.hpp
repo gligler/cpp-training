@@ -18,77 +18,20 @@ public:
     void Execute(const std::string& command) noexcept override;
     Pose Query(void) const noexcept override;
 
-private:
-    Pose pose;
-    bool fast{false};
 
-    // 这些是真正的实现 - 必须保留！
-private:
+public:
     void Move(void) noexcept;  // 实际前进的代码
     void TurnLeft(void) noexcept;  // 实际左转的代码
     void TurnRight(void) noexcept;  // 实际右转的代码
     void Fast(void) noexcept;
     bool IsFast(void) const noexcept;
 
-
-
 private:
-    // 抽象基类定义在 private 区域
-    class ICommand
-    {
-    public:
-        virtual ~ICommand() = default;
-        virtual void DoOperate(ExecutorImpl& executor) const noexcept = 0;
-    };
+    Pose pose;
+    bool fast{false};
 
-    // 具体命令类也定义在 private 区域，继承自 ICommand
-    class MoveCommand final : public ICommand
-    {  
-    public:
-        void DoOperate(ExecutorImpl& executor) const noexcept override
-        {
-            if (executor.IsFast()){
-                executor.Move();
-            }
-            
-            executor.Move();
-        }
-    };
 
-    class TurnLeftCommand final : public ICommand
-    {
-    public:
-        void DoOperate(ExecutorImpl& executor) const noexcept override
-        {
-            if (executor.IsFast()) {
-                executor.Move();
-            }
-            executor.TurnLeft();
-        }
-    };
-
-    class TurnRightCommand final : public ICommand
-    {
-    public:
-        void DoOperate(ExecutorImpl& executor) const noexcept override
-        {
-            if (executor.IsFast()) {
-                executor.Move();
-            }
-            executor.TurnRight();
-        }
-
-    };
-
-    class FastCommand final : public ICommand
-    {
-    public:
-        void DoOperate(ExecutorImpl& executor) const noexcept override
-        {
-            executor.Fast();
-        }
-    };
-
+    
        
     };  // 尾巴确保为紫色
 
