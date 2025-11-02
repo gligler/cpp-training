@@ -20,12 +20,15 @@ public:
 
 private:
     Pose pose;
+    bool fast{false};
 
     // 这些是真正的实现 - 必须保留！
 private:
     void Move(void) noexcept;  // 实际前进的代码
     void TurnLeft(void) noexcept;  // 实际左转的代码
     void TurnRight(void) noexcept;  // 实际右转的代码
+    void Fast(void) noexcept;
+    bool IsFast(void) const noexcept;
 
 
 
@@ -44,6 +47,10 @@ private:
     public:
         void DoOperate(ExecutorImpl& executor) const noexcept override
         {
+            if (executor.IsFast()){
+                executor.Move();
+            }
+            
             executor.Move();
         }
     };
@@ -53,6 +60,9 @@ private:
     public:
         void DoOperate(ExecutorImpl& executor) const noexcept override
         {
+            if (executor.IsFast()) {
+                executor.Move();
+            }
             executor.TurnLeft();
         }
     };
@@ -62,9 +72,21 @@ private:
     public:
         void DoOperate(ExecutorImpl& executor) const noexcept override
         {
+            if (executor.IsFast()) {
+                executor.Move();
+            }
             executor.TurnRight();
         }
 
+    };
+
+    class FastCommand final : public ICommand
+    {
+    public:
+        void DoOperate(ExecutorImpl& executor) const noexcept override
+        {
+            executor.Fast();
+        }
     };
 
        
