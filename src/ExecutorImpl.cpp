@@ -12,30 +12,25 @@ ExecutorImpl::ExecutorImpl(const Pose& pose) noexcept:pose(pose)
 {
 }
 
-void ExecutorImpl::Execute(const std::string& commands) noexcept
-{
-    for (const auto cmd : commands)
-    {
-        if (cmd == 'M') // 前进
-        {
-           // Move();
-           std::unique_ptr<MoveCommand> cmder = std::make_unique<MoveCommand>();
-           cmder->DoOperate(*this);
-        }
-        else if (cmd == 'L')  // 左转
-        {
-            //TurnLeft();
-            std::unique_ptr<TurnLeftCommand> cmder = std::make_unique<TurnLeftCommand>();
-           cmder->DoOperate(*this); 
-        }
 
-        else if (cmd == 'R')  // 右转
-        {
-            //TurnRight();
-            std::unique_ptr<TurnRightCommand> cmder = std::make_unique<TurnRightCommand>();
-           cmder->DoOperate(*this); 
-        }
-    }
+
+ void ExecutorImpl::Execute(const std::string& commands) noexcept
+ {
+     for (const auto cmd : commands) {
+         std::unique_ptr<ICommand> cmder;
+
+         if (cmd == 'M') {
+             cmder = std::make_unique<MoveCommand>();
+         } else if (cmd == 'L') {
+             cmder = std::make_unique<TurnLeftCommand>();
+         } else if (cmd == 'R') {
+             cmder = std::make_unique<TurnRightCommand>();
+         }
+
+         if (cmder) {
+             cmder->DoOperate(*this);
+         }
+     }
  }
 
  void ExecutorImpl::Move() noexcept
@@ -96,4 +91,4 @@ Pose ExecutorImpl::Query() const noexcept
 {
     return pose;
 }
-}  // namespace adas
+}  // namespace adas黄色括号

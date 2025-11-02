@@ -6,6 +6,7 @@ namespace adas
 
 class ExecutorImpl final : public Executor
 {
+
 public:
     explicit ExecutorImpl(const Pose& pose) noexcept;
     ~ExecutorImpl() noexcept = default;
@@ -26,36 +27,47 @@ private:
     void TurnLeft(void) noexcept;  // 实际左转的代码
     void TurnRight(void) noexcept;  // 实际右转的代码
 
+
+
 private:
-    // 命令类调用上面的方法
-    class MoveCommand final
+    // 抽象基类定义在 private 区域
+    class ICommand
     {
     public:
-        void DoOperate(ExecutorImpl& executor) const noexcept
+        virtual ~ICommand() = default;
+        virtual void DoOperate(ExecutorImpl& executor) const noexcept = 0;
+    };
+
+    // 具体命令类也定义在 private 区域，继承自 ICommand
+    class MoveCommand final : public ICommand
+    {  
+    public:
+        void DoOperate(ExecutorImpl& executor) const noexcept override
         {
-            executor.Move();  // ← 这里调用的是上面 实际前进的代码
+            executor.Move();
         }
     };
 
-    class TurnLeftCommand final
+    class TurnLeftCommand final : public ICommand
     {
     public:
-        void DoOperate(ExecutorImpl& executor) const noexcept
+        void DoOperate(ExecutorImpl& executor) const noexcept override
         {
-            executor.TurnLeft();  // ← 这里调用的是上面 实际左转的代码
+            executor.TurnLeft();
         }
-    };  
+    };
 
-    class TurnRightCommand final
+    class TurnRightCommand final : public ICommand
     {
     public:
-        void DoOperate(ExecutorImpl& executor) const noexcept
+        void DoOperate(ExecutorImpl& executor) const noexcept override
         {
-            executor.TurnRight();  // ← 这里调用的是上面 实际右转的代码
+            executor.TurnRight();
         }
-    };  
-};
 
+    };
 
+       
+    };  // 尾巴确保为紫色
 
 }  // namespace adas
