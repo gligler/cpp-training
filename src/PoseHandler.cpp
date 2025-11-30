@@ -7,7 +7,7 @@ PoseHandler::PoseHandler(const Pose& pose) noexcept : pose(pose)
 }
 
 
-void PoseHandler::Move() noexcept
+void PoseHandler::Forward() noexcept
 {
     switch (pose.heading) {
     case 'N':
@@ -21,6 +21,24 @@ void PoseHandler::Move() noexcept
         break;
     case 'E':
         ++pose.x;
+        break;
+    }
+}
+
+void PoseHandler::Backward() noexcept
+{
+    switch (pose.heading) {
+    case 'N':
+        --pose.y;
+        break;
+    case 'W':
+        ++pose.x;
+        break;
+    case 'S':
+        ++pose.y;
+        break;
+    case 'E':
+        --pose.x;
         break;
     }
 }
@@ -70,6 +88,17 @@ bool PoseHandler::IsFast() const noexcept
 {
     return fast;
 }
+
+bool PoseHandler::IsReverse() const noexcept
+{
+    return reverse;
+}
+
+void PoseHandler::Reverse() noexcept
+{
+    reverse = !reverse;
+}
+
 
 Pose PoseHandler::Query() const noexcept
 {

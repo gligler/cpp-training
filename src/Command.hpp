@@ -5,17 +5,45 @@
 namespace adas{
 
 
-class MoveCommand final 
+class ForwardCommand final 
 {
 public:
     void operator() (PoseHandler& poseHandler) const noexcept 
     {
         if(poseHandler.IsFast()){
-            poseHandler.Move();
+            if(poseHandler.IsReverse()){
+                poseHandler.Backward();
+            }else{
+                poseHandler.Forward();
+            }
         }
-        poseHandler.Move();
-    };
+
+        if (poseHandler.IsReverse()) {
+            poseHandler.Backward();
+        } else {
+            poseHandler.Forward();
+        }
+    }
 };
+
+// class BackwardCommand final
+// {
+// public:
+//     void operator()(PoseHandler& poseHandler) const noexcept
+//     {
+//         if (poseHandler.IsFast()) {
+//             if (poseHandler.IsReverse()) {
+//                 poseHandler.Forward();
+//             } else {
+//                 poseHandler.Backward();
+//             }
+//         }
+
+//         if (poseHandler.IsReverse()) {
+//             poseHandler.Forward();
+//         }
+//     }
+// }
 
 class TurnLeftCommand final
 {
@@ -23,10 +51,19 @@ public:
     void operator()(PoseHandler& poseHandler) const noexcept
     {
         if (poseHandler.IsFast()) {
-            poseHandler.Move();
+            if (poseHandler.IsReverse()) {
+                poseHandler.Backward();
+            } else {
+                poseHandler.Forward();
+            }
         }
-        poseHandler.TurnLeft();
-    };
+
+        if (poseHandler.IsReverse()) {
+            poseHandler.TurnRight();
+        } else {
+            poseHandler.TurnLeft();
+        }
+    }
 };
 
 class TurnRightCommand final
@@ -35,10 +72,18 @@ public:
     void operator()(PoseHandler& poseHandler) const noexcept
     {
         if (poseHandler.IsFast()) {
-            poseHandler.Move();
+            if (poseHandler.IsReverse()) {
+                poseHandler.Backward();
+            } else {
+                poseHandler.Forward();
+            }
         }
-        poseHandler.TurnRight();
-    };
+        if (poseHandler.IsReverse()) {
+            poseHandler.TurnLeft();
+        } else {
+            poseHandler.TurnRight();
+        }
+    }
 };
 
 class FastCommand final
@@ -47,6 +92,18 @@ public:
     void operator()(PoseHandler& poseHandler) const noexcept 
     {
         poseHandler.Fast();
-    };
+    }
 };
+
+class ReverseCommand final
+{
+public:
+    void operator()(PoseHandler& poseHandler) const noexcept
+    {
+        poseHandler.Reverse();
+    }
+};
+
+
+
 }
