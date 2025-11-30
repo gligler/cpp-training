@@ -2,6 +2,8 @@
 #include "Command.hpp"
 #include <memory>   
 #include <unordered_map>
+#include "CmderFactory.hpp"
+#include "Singleton.hpp"
 
 namespace adas
 {
@@ -14,34 +16,36 @@ ExecutorImpl::ExecutorImpl(const Pose& pose) noexcept:poseHandler(pose)
 {
 }
 
-
-
- void ExecutorImpl::Execute(const std::string& commands) noexcept
- {
-     const std::unordered_map<char, std::function<void(PoseHandler & poseHandler)>> cmderMap{
-         {'M', ForwardCommand()},
-         {'F', FastCommand()},
-         {'L', TurnLeftCommand()},
-         {'R', TurnRightCommand()},
-         {'B', ReverseCommand()}
-     };
+void ExecutorImpl::Execute(const std::string& commands) noexcept{
     
-     
+    const auto cmders = Singleton<CmderFactory>::Instance().GetCmders(commands);
 
-     for (const auto cmd : commands) {
-         const auto it = cmderMap.find(cmd);
+    std::for_each(cmders.begin(), cmders.end(), [this](const Cmder& cmder) noexcept{cmder(poseHandler); });
+}
 
-         if (it != cmderMap.end()) {
-             it->second(poseHandler);
-         }
-     }
- }
+    //  void ExecutorImpl::Execute(const std::string& commands) noexcept
+    //  {
+    //      const std::unordered_map<char, std::function<void(PoseHandler & poseHandler)>> cmderMap{
+    //          {'M', ForwardCommand()},
+    //          {'F', FastCommand()},
+    //          {'L', TurnLeftCommand()},
+    //          {'R', TurnRightCommand()},
+    //          {'B', ReverseCommand()}
+    //      };
 
- 
-Pose ExecutorImpl::Query() const noexcept
- {
-     return poseHandler.Query();
- }
+    //      for (const auto cmd : commands) {
+    //          const auto it = cmderMap.find(cmd);
+
+    //          if (it != cmderMap.end()) {
+    //              it->second(poseHandler);
+    //          }
+    //      }
+    //  }
+
+    Pose ExecutorImpl::Query() const noexcept
+{
+    return poseHandler.Query();
+}
  
 
  
