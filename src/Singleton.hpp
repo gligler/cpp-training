@@ -5,7 +5,7 @@ namespace adas
     class Singleton final
     {
     public:
-        static T& Instance(void) noexcept
+        static T& Instance(void)
         {
             static T instance;
             return instance;
@@ -15,8 +15,8 @@ namespace adas
         Singleton& operator=(const Singleton&) noexcept = delete;
 
     private:
-        Singleton(void) noexcept = default;
-        ~Singleton(void) noexcept = default;
+        Singleton(void)  = default;
+        ~Singleton(void) = default;
         };
 
 }

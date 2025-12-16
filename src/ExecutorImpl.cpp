@@ -7,40 +7,24 @@
 
 namespace adas
 {
-Executor* Executor::NewExecutor(const Pose& pose) noexcept
+Executor* Executor::NewExecutor(const Pose& pose, VehicleType vehicleType) noexcept
 {
-    return new (std::nothrow) ExecutorImpl(pose);
+    return new (std::nothrow) ExecutorImpl(pose, vehicleType);
 }
 
-ExecutorImpl::ExecutorImpl(const Pose& pose) noexcept:poseHandler(pose)
+ExecutorImpl::ExecutorImpl(const Pose& pose, VehicleType vehicleType) noexcept : poseHandler(pose, vehicleType)
 {
 }
+void ExecutorImpl::Execute(const std::string& commands) noexcept
+{
+    VehicleType type = poseHandler.GetVehicleType();
 
-void ExecutorImpl::Execute(const std::string& commands) noexcept{
-    
-    const auto cmders = Singleton<CmderFactory>::Instance().GetCmders(commands);
+    const auto cmders = Singleton<CmderFactory>::Instance().GetCmders(commands, type);
 
-    std::for_each(cmders.begin(), cmders.end(), [this](const Cmder& cmder) noexcept{cmder(poseHandler); });
+    std::for_each(cmders.begin(), cmders.end(), [this](const Cmder& cmder) noexcept {
+        cmder(poseHandler);  
+    });
 }
-
-    //  void ExecutorImpl::Execute(const std::string& commands) noexcept
-    //  {
-    //      const std::unordered_map<char, std::function<void(PoseHandler & poseHandler)>> cmderMap{
-    //          {'M', ForwardCommand()},
-    //          {'F', FastCommand()},
-    //          {'L', TurnLeftCommand()},
-    //          {'R', TurnRightCommand()},
-    //          {'B', ReverseCommand()}
-    //      };
-
-    //      for (const auto cmd : commands) {
-    //          const auto it = cmderMap.find(cmd);
-
-    //          if (it != cmderMap.end()) {
-    //              it->second(poseHandler);
-    //          }
-    //      }
-    //  }
 
     Pose ExecutorImpl::Query() const noexcept
 {
